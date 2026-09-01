@@ -1,0 +1,18 @@
+.tilt3d {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt3d-content {
+  transform: translateZ(0);
+  transform-style: preserve-3d;
+}
+
+.tilt3d-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}

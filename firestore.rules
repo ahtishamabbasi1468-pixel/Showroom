@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "Admin";
+    }
+
+    // ---- users/{uid} — one profile doc per Firebase Auth account ----
+    // Created automatically at sign-up (registerUser in firebase/authService.js).
+    // To make someone an Admin: they register normally, then you edit their
+    // doc here (or via Admin -> Users) and set role to "Admin".
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---- Public catalog — everyone can read, only Admin can write ----
+    match /cars/{carId} {
+      allow read: if true;
+      allow write: if isAdmin();
+
+      // One rating doc per user per car: cars/{carId}/ratings/{uid}
+      match /ratings/{uid} {
+        allow read: if true;
+        allow write: if isOwner(uid);
+      }
+    }
+
+    match /brands/{id}      { allow read: if true; allow write: if isAdmin(); }
+    match /categories/{id}  { allow read: if true; allow write: if isAdmin(); }
+    match /services/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /packages/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /blogs/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /settings/{id}    { allow read: if true; allow write: if isAdmin(); }
+
+    // Reviews: anyone can read; any signed-in customer can post one; only
+    // admin can edit/hide/delete.
+    match /reviews/{id} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // ---- Admin-only operational data ----
+    match /customers/{id} { allow read, write: if isAdmin(); }
+    match /staff/{id}     { allow read, write: if isAdmin(); }
+
+    // Bookings: any signed-in customer can create their own (test drive /
+    // service). Read is open to any signed-in user so the customer
+    // Dashboard can show "my bookings" (filtered client-side by email) —
+    // tighten `allow read` to isAdmin() only if you'd rather bookings stay
+    // strictly private between each customer and the showroom.
+    match /bookings/{id} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /notifications/{id} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}

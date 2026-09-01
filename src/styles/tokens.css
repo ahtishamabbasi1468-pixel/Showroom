@@ -1,0 +1,92 @@
+/* ==========================================================================
+   DESIGN TOKENS — "Ignition" system
+   Subject: performance-car showroom. The palette is pulled from a garage at
+   night — graphite paint, brushed chrome, asphalt — with an ignition-orange
+   accent (dashboard warning / start button) and a volt-cyan accent (EV /
+   telemetry). Type pairs a condensed dashboard face with a clean body face
+   and a monospace face for specs, like numbers on an instrument cluster.
+   ========================================================================== */
+
+:root {
+  /* ---- Color: named, then role-mapped ---- */
+  --graphite-950: #0a0c0f;
+  --graphite-900: #111318;
+  --graphite-800: #181b21;
+  --asphalt-700: #22262e;
+  --asphalt-600: #2e333d;
+  --chrome-400: #8a929e;
+  --chrome-200: #c9cfd8;
+  --chrome-100: #e7eaef;
+  --warm-white: #f6f4ef;
+  --ignition-500: #ff5a1f;
+  --ignition-400: #ff7a45;
+  --ignition-glow: rgba(255, 90, 31, 0.45);
+  --volt-500: #00e0c6;
+  --volt-glow: rgba(0, 224, 198, 0.35);
+  --danger-500: #ff4d5e;
+  --success-500: #35d07f;
+
+  --bg-app: var(--graphite-950);
+  --bg-surface: var(--graphite-900);
+  --bg-surface-raised: var(--asphalt-700);
+  --bg-surface-hover: var(--asphalt-600);
+  --border-hairline: rgba(201, 207, 216, 0.12);
+  --border-hairline-strong: rgba(201, 207, 216, 0.22);
+  --text-primary: var(--warm-white);
+  --text-secondary: var(--chrome-200);
+  --text-muted: var(--chrome-400);
+  --accent-primary: var(--ignition-500);
+  --accent-secondary: var(--volt-500);
+
+  /* ---- Type ---- */
+  --font-display: "Rajdhani", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  --fs-hero: clamp(2.75rem, 6vw, 5.5rem);
+  --fs-h1: clamp(2rem, 3.6vw, 3.25rem);
+  --fs-h2: clamp(1.5rem, 2.4vw, 2.25rem);
+  --fs-h3: clamp(1.15rem, 1.6vw, 1.5rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  /* ---- Layout ---- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --max-width: 1320px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* ---- Motion / depth ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-elevated: 0 20px 60px -20px rgba(0, 0, 0, 0.7);
+  --shadow-card: 0 10px 30px -12px rgba(0, 0, 0, 0.55);
+  --perspective: 1200px;
+}
+
+@media (prefers-color-scheme: light) {
+  /* Dark automotive theme is intentional for both modes; app also ships an
+     explicit toggle — see .theme-light overrides below. */
+}
+
+.theme-light {
+  --bg-app: #eef0f3;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #f7f8fa;
+  --bg-surface-hover: #eceef1;
+  --border-hairline: rgba(10, 12, 15, 0.1);
+  --border-hairline-strong: rgba(10, 12, 15, 0.18);
+  --text-primary: #14161a;
+  --text-secondary: #3d424c;
+  --text-muted: #6b7280;
+}
